@@ -1,7 +1,10 @@
 const path = require('path')
 const express = require("express");
+const history = require('connect-history-api-fallback');
 
 const app = express();
+
+app.use(history({index: '/index.html'})) // pour le deep linking (après avoir npm i --save connect-...)
 
 app.get('/api/parts', (req, res) =>
   res.send({
@@ -174,6 +177,9 @@ app.post('/api/cart', (req, res) =>
 app.post('/api/sign-in', (req, res) => res.status(200).send());
 
 app.use('/api/images', express.static('images'));
+
+app.use('/', express.static('dist', {index: 'index.html'})); // pour le passage en prod de l'application 
+// indication d'aller chercher le dist qu'on a au préalable copié de notre dossier generalrepo (après fait le npm run build)
 
 app.listen(8081, () => console.log('Server listening on port 8081!'));
 
